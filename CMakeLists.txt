@@ -33,8 +33,15 @@ set(OPEN62541_VER_MINOR 4)
 set(OPEN62541_VER_PATCH 0)
 set(OPEN62541_VER_LABEL "-dev") # Appended to the X.Y.Z version format. For example "-rc1" or an empty string
 
+# Handle Multiarch library path in Debian package builds
+if(CMAKE_LIBRARY_ARCHITECTURE)
+    set(LIB_ARCH "/${CMAKE_LIBRARY_ARCHITECTURE}")
+else()
+    set(LIB_ARCH "")
+endif()
+
 #  If a relative path is specified, it is treated as relative to the $<INSTALL_PREFIX>
-set(LIB_INSTALL_DIR lib CACHE PATH "Installation path of libraries")
+set(LIB_INSTALL_DIR lib${LIB_ARCH} CACHE PATH "Installation path of libraries")
 
 # Set OPEN62541_VER_COMMIT
 if(GIT_FOUND)
@@ -893,6 +900,10 @@ else()
     target_compile_definitions(open62541-plugins PRIVATE -DUA_DYNAMIC_LINKING_EXPORT)
     set_target_properties(open62541-plugins PROPERTIES FOLDER "open62541/lib")
 
+    if(UA_PACK_DEBIAN)
+        add_library(open62541-static STATIC $<TARGET_OBJECTS:open62541-object> $<TARGET_OBJECTS:open62541-plugins>)
+        set_target_properties(open62541-static PROPERTIES OUTPUT_NAME open62541)
+    endif()
     add_library(open62541 $<TARGET_OBJECTS:open62541-object> $<TARGET_OBJECTS:open62541-plugins>)
 
     if(UA_COMPILE_AS_CXX)
@@ -1110,7 +1121,12 @@ endif()
 
 # export library (either static or shared depending on BUILD_SHARED_LIBS)
 if(NOT UA_ENABLE_AMALGAMATION)
-install(TARGETS open62541
+    if(UA_PACK_DEBIAN)
+        set(EXTRATARGETS "open62541-static")
+    else()
+        set(EXTRATARGETS "")
+    endif()
+install(TARGETS open62541 ${EXTRATARGETS}
         EXPORT open62541Targets
         LIBRARY DESTINATION ${LIB_INSTALL_DIR}
         ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
