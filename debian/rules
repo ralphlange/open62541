@@ -15,5 +15,20 @@ override_dh_auto_configure:
 override_dh_auto_test:
 	dh_auto_test -- ARGS+=--output-on-failure
 
+override_dh_auto_build:
+	dh_auto_build
+	make -C obj-${DEB_HOST_MULTIARCH} doc doc_pdf
+
+override_dh_install:
+	install -d debian/tmp/usr/share/doc/open62541
+	cp -dR obj-${DEB_HOST_MULTIARCH}/doc debian/tmp/usr/share/doc/open62541/open62541.html
+	cp -dR obj-${DEB_HOST_MULTIARCH}/doc_latex/open62541.pdf debian/tmp/usr/share/doc/open62541/
+	rm -fr debian/tmp/usr/share/doc/open62541/open62541.html/CMakeFiles
+	rm -f debian/tmp/usr/share/doc/open62541/open62541.html/Makefile
+	
+	dh_install
+	
+	dh_sphinxdoc usr/share/doc/open62541/open62541.html
+
 %:
 	dh $@ --buildsystem=cmake --parallel

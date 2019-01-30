@@ -9,7 +9,8 @@ Vcs-Browser: https://github.com/open62541/open62541
 Build-Depends: debhelper (>= 9),
  cmake (>= 2.8.8),
  python (>= 2.7),
- python-six
+ python-six,
+ python-sphinx
 
 Package: libopen62541-0
 Architecture: any
@@ -34,3 +35,15 @@ Description: Open source implementation of OPC UA - development files
  .
  This package contains the libopen62541 development libraries
  and header files.
+
+Package: open62541-doc
+Section: doc
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}, ${sphinxdoc:Depends}
+Description: Open source implementation of OPC UA - documentation
+ open62541 is an open source C (C99) implementation of the OPC UA
+ (OPC Unified Architecture) standard aka IEC 62541.
+ .
+ This package contains the documentation for the open62541 library
+ and development tools.
