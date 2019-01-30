@@ -32,6 +32,7 @@ matrix:
             # debian packaging
             - cmake
             - debhelper
+            - dh-exec
             - fakeroot
             # doc
             - python-sphinx
@@ -345,7 +346,7 @@ deploy:
     - open62541-raspberrypi.tar.gz
     - open62541.c
     - open62541.h
-    - open62541*.deb
+    - "*open62541*.deb"
   file_glob: true
   skip_cleanup: true
   on:

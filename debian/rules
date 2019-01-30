@@ -2,18 +2,18 @@
 
 export DH_VERBOSE = 1
 
-export DEB_BUILD_OPTIONS=parallel=4
+export DEB_BUILD_OPTIONS = parallel=4
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DUA_NAMESPACE_ZERO=FULL -DUA_ENABLE_AMALGAMATION=OFF -DUA_PACK_DEBIAN=ON
+	dh_auto_configure -- -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DUA_NAMESPACE_ZERO=FULL \
+                             -DUA_ENABLE_AMALGAMATION=OFF -DUA_PACK_DEBIAN=ON \
+                             -DCMAKE_LIBRARY_ARCHITECTURE="$(DEB_HOST_MULTIARCH)"
 
 override_dh_auto_test:
 	dh_auto_test -- ARGS+=--output-on-failure
 
-override_dh_strip:
-	dh_strip --dbg-package=open62541-dbg
-
 %:
 	dh $@ --buildsystem=cmake --parallel
-
-

@@ -1,5 +1,9 @@
-open62541 (0.4) UNRELEASED; urgency=low
+open62541 (0.4.0) UNRELEASED; urgency=low
 
+  [ open62541 Team ]
   * Initial Release.
 
- -- open62541 Team <open62541-core@googlegroups.com>  Tue, 18 Dec 2018 10:51:28 +0100
+  [ Ralph Lange ]
+  * More complete debianization.
+
+ -- Ralph Lange <ralph.lange@gmx.de>  Wed, 16 Jan 2019 15:33:08 +0100
