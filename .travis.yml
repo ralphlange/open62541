@@ -29,11 +29,7 @@ matrix:
             - gcc-mingw-w64-x86-64
             - binutils-mingw-w64-i686
             - g++-multilib
-            # debian packaging
-            - cmake
-            - debhelper
-            - dh-exec
-            - fakeroot
+            - python-six
             # doc
             - python-sphinx
             - graphviz
@@ -46,7 +42,6 @@ matrix:
             - valgrind
       env:
         - MINGW=true
-        - DEBIAN=true
 #
 # gcc-8 full host build with tests:
 # doc, cert, linux64,
@@ -182,6 +177,32 @@ matrix:
       env:
         - ANALYZE=true
         - PYTHON=python3
+#
+# Debian packaging build
+    - os: linux
+      dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          packages:
+            - python-six
+            # debian packaging
+            - cmake
+            - devscripts
+            - debhelper
+            - fakeroot
+            # doc
+            - python-sphinx
+            - python-sphinx-rtd-theme
+            - graphviz
+            - texlive-generic-extra
+            - texlive-fonts-recommended
+            - texlive-latex-extra
+            - latexmk
+            # tests
+            - check
+      env:
+        - DEBIAN=true
 #
 # cpplint checking
     #- os: linux

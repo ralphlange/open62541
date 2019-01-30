@@ -58,6 +58,18 @@ if ! [ -z ${FUZZER+x} ]; then
     exit 0
 fi
 
+# Build Debian packages
+if ! [ -z ${DEBIAN+x} ]; then
+    echo -e "\r\n== Building the Debian packages ==" && echo -en 'travis_fold:start:script.build.debian\\r'
+    debuild -us -uc -b --lintian-opts -i -I --show-overrides
+    if [ $? -ne 0 ] ; then exit 1 ; fi
+    cp ../*open62541*.deb .
+    # Copy for github release script
+    cp ../*open62541*.deb ../..
+    echo -en 'travis_fold:end:script.build.debian\\r'
+    exit 0
+fi
+
 # INSTALL build test
 if ! [ -z ${INSTALL+x} ]; then
 echo "=== Install build, then compile examples ===" && echo -en 'travis_fold:start:script.build.install\\r'
