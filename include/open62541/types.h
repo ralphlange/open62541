@@ -1067,7 +1067,7 @@ typedef struct UA_DataTypeArray {
  * If the member is an array, the offset points to the (size_t) length field.
  * (The array pointer comes after the length field without any padding.) */
 #ifdef UA_ENABLE_TYPEDESCRIPTION
-UA_Boolean
+UA_Boolean UA_EXPORT
 UA_DataType_getStructMember(const UA_DataType *type,
                             const char *memberName,
                             size_t *outOffset,
